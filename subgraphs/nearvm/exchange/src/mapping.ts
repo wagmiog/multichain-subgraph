@@ -28,6 +28,7 @@ function handleAction(
   }
   
   let accounts = new Account(receipt.signerId);
+
   const functionCall = action.toFunctionCall();
 
 // SWAP FUNCTION CALL

@@ -32,7 +32,6 @@ export function fill_pair(
     let rawString = outcome.logs[0]
     let splitString = rawString.split(' ')
     let token = new Token(`${receiptId}`);
-    
     token.id = id
     token.save()
   
