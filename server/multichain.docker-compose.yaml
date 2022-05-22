@@ -18,7 +18,7 @@ services:
       ipfs: 'ipfs:5001'
       AVALANCHE_RPC_ENDPOINT: ${AVALANCHE_RPC_ENDPOINT}
       NEAR_RPC_ENDPOINT: ${NEAR_RPC_ENDPOINT}
-      GRAPH_MAX_SPEC_VERSION: 0.0.5
+      GRAPH_MAX_SPEC_VERSION: 0.0.6
       #ethereum: avalanche:https://api.avax.network/ext/bc/C/rpc
     volumes:
       - ./configs/multichain.toml:/etc/graph-node/config.toml
@@ -40,3 +40,18 @@ services:
 
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+  pgweb:
+    container_name: pgweb-gn
+    image: sosedoff/pgweb:0.11.10
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    command: ["pgweb", "--bind=0.0.0.0", "--listen=8081", "--binary-codec=hex"]
+    #command: ["pgweb", "--binary-codec=base58"]
+    #command: ["pgweb", "--binary-codec=base64"]
+    links:
+      - postgres:postgres
+    environment:
+      - DATABASE_URL=postgres://graph-node:let-me-in@postgres:5432/graph-node?sslmode=disable
+    depends_on:
+      - postgres

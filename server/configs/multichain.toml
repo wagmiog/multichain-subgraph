@@ -1,5 +1,5 @@
 [general]
-
+#https://github.com/graphprotocol/graph-node/blob/master/docs/config.md
 [store]
 [store.primary]
 connection = "postgresql://graph-node:let-me-in@postgres:5432/graph-node"
@@ -16,8 +16,10 @@ provider = [
     { label = "near-mainnet", url = "https://rpc.mainnet.near.org",features = []}
 ]
 #provider = [
-#    { label = "near-mainnet", details = { type = "firehose", url = "https://mainnet.near.streamingfast.io", token = "$STREAMING_FAST_API_TOKEN" }},
-#] https://github.com/streamingfast/graph-node-dev/blob/master/config/near-mainnet.toml
+#    { label = "near-mainnet", details = { type = "firehose", url = "https://rpc.mainnet.near.org" }},
+#]
+#https://github.com/streamingfast/graph-node-dev/blob/master/config/near-mainnet.toml
+
 [chains.avalanche]
 shard = "primary"
 provider = [
