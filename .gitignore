@@ -6,5 +6,5 @@ yarn-error.log
 .idea
 **/types/**
 **/types
-subgraphs/**/abis
+!subgraphs/**/abis
 server/data/*
