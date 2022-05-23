@@ -20,7 +20,13 @@
     "deploy-local": "yarn workspaces run deploy-local",
     "deploy": "yarn workspaces run deploy",
     "deploy-staging": "yarn workspaces run deploy-staging",
-    "watch-local": "yarn workspaces run watch-local"
+    "watch-local": "yarn workspaces run watch-local",
+    "deploySubgraph": "node ./scripts/deploy.js"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "0.29.0",
+    "@graphprotocol/graph-ts": "0.26.0",
+    "commander": "^9.2.0",
+    "mustache": "^4.2.0"
+  }
 }

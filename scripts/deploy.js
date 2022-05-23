@@ -1,20 +1,20 @@
 const { program } = require('commander');
-var Mustache = require('mustache');
 const { exec } = require("child_process");
+import { errorColor , successColor} from "./utils";
 
 
 /*
 DEFAULT CONFIGS
  */
-function errorColor(str) {
-    // Add ANSI escape codes to display text in red.
-    return `\x1b[31m${str}\x1b[0m`;
-}
+// function errorColor(str) {
+//     // Add ANSI escape codes to display text in red.
+//     return `\x1b[31m${str}\x1b[0m`;
+// }
 
-function successColor(str) {
-    // Add ANSI escape codes to display text in red.
-    return `\u001b[32m${str}\u001b[32m`;
-}
+// function successColor(str) {
+//     // Add ANSI escape codes to display text in red.
+//     return `\u001b[32m${str}\u001b[32m`;
+// }
 
 program
     .configureOutput({
@@ -40,7 +40,15 @@ const subgraph = options.subgraph;
 const environment = options.environment;
 const versionLabel = options.versionLabel;
 
+//TODO: build subgraphpath by reading json
 
+let vmPath
+if (network == "near"){
+    vmPath = "nearvm"
+} else {
+    vmPath = "evm"
+}
+let subgraphPath = `subgraphs/${vmPath}/${subgraph}`
 let nodeAddress
 let ipfsAddress
 
@@ -67,12 +75,14 @@ switch (environment) {
         break
 }
 
+
+
 //TODO: use SDK if subgraph is supported
 
-if(!["avalanche","fuji"].includes(network)){
+if(!["avalanche","fuji","near"].includes(network)){
     program.error(`Network '${network}' isn't supported for this subgraph`)
 }
-if(!["governance","exchange"].includes(subgraph)){
+if(!["governance","exchange","minichef"].includes(subgraph)){
     program.error(`Subgraph '${network}' isn't a valid subgraph`)
 }
 
@@ -93,7 +103,9 @@ if(options.create) {
 
 }
 
-exec(`mustache networks/${network}.json manifests/template.yaml > manifests/${network}.yaml`, (error, stdout, stderr) => {
+
+
+exec(`mustache subgraphs/configs/${network}.json ${subgraphPath}/manifests/template.yaml > ${subgraphPath}/manifests/${network}.yaml`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
@@ -105,7 +117,7 @@ exec(`mustache networks/${network}.json manifests/template.yaml > manifests/${ne
     // console.log(`stdout: ${stdout}`);
 });
 
-exec(`graph codegen manifests/${network}.yaml`, (error, stdout, stderr) => {
+exec(`graph codegen ${subgraphPath}/manifests/${network}.yaml`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
@@ -117,7 +129,7 @@ exec(`graph codegen manifests/${network}.yaml`, (error, stdout, stderr) => {
     // console.log(`stdout: ${stdout}`);
 });
 
-exec(`graph deploy pangolindex/${network}-governance manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel}`, (error, stdout, stderr) => {
+exec(`graph deploy pangolindex/${network}-${subgraph} ${subgraphPath}/manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel}`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
