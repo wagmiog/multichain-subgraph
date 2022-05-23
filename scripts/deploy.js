@@ -90,7 +90,7 @@ if(!["governance","exchange","minichef"].includes(subgraph)){
 
 
 if(options.create) {
-    exec(`graph create --node ${nodeAddress} pangolindex/${network}-${subgraph} --access-token ${accessToken}`, (error, stdout, stderr) => {
+    exec(`graph create --node ${nodeAddress} ${user}/${network}-${subgraph} --access-token ${accessToken}`, (error, stdout, stderr) => {
         if (error) {
             program.error(error)
             return;
