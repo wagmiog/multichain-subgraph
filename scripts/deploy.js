@@ -30,6 +30,7 @@ program
     .requiredOption('-s, --subgraph <char>', 'subgraph name')
     .requiredOption('-e, --environment <char>', 'node address', "local")
     .requiredOption('-v, --version-label <char>', 'node address', "0.0.1")
+    .option('-t, --access-token <char>', 'graph access token')
     .option('--create');
 
 
@@ -39,7 +40,7 @@ const network = options.network ;
 const subgraph = options.subgraph;
 const environment = options.environment;
 const versionLabel = options.versionLabel;
-
+const accessToken = options.accessToken;
 //TODO: build subgraphpath by reading json
 
 let vmPath
@@ -88,7 +89,7 @@ if(!["governance","exchange","minichef"].includes(subgraph)){
 
 
 if(options.create) {
-    exec(`graph create --node ${nodeAddress} pangolindex/${network}-${subgraph}`, (error, stdout, stderr) => {
+    exec(`graph create --node ${nodeAddress} pangolindex/${network}-${subgraph} --access-token ${accessToken}`, (error, stdout, stderr) => {
         if (error) {
             program.error(error)
             return;
@@ -129,7 +130,7 @@ exec(`graph codegen ${subgraphPath}/manifests/${network}.yaml`, (error, stdout, 
     // console.log(`stdout: ${stdout}`);
 });
 
-exec(`graph deploy pangolindex/${network}-${subgraph} ${subgraphPath}/manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel}`, (error, stdout, stderr) => {
+exec(`graph deploy pangolindex/${network}-${subgraph} ${subgraphPath}/manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel} --access-token ${accessToken}`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
