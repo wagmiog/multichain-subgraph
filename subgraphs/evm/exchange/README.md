@@ -55,4 +55,3 @@ This query fetches aggredated data from all Pangolin pairs and tokens, to give a
   }
 }
 ```
-
