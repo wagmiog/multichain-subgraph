@@ -20,7 +20,7 @@ dataSources:
         - Proposal
       abis:
         - name: Governance
-          file: ../../abis/governance.json
+          file: ../../../abis/governance.json
       eventHandlers:
         - event: ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)
           handler: handleNewProposal
