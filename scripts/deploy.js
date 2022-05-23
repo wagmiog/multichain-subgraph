@@ -1,20 +1,17 @@
 const { program } = require('commander');
 const { exec } = require("child_process");
-import { errorColor , successColor} from "./utils";
-
-
 /*
 DEFAULT CONFIGS
  */
-// function errorColor(str) {
-//     // Add ANSI escape codes to display text in red.
-//     return `\x1b[31m${str}\x1b[0m`;
-// }
+function errorColor(str) {
+    // Add ANSI escape codes to display text in red.
+    return `\x1b[31m${str}\x1b[0m`;
+}
 
-// function successColor(str) {
-//     // Add ANSI escape codes to display text in red.
-//     return `\u001b[32m${str}\u001b[32m`;
-// }
+function successColor(str) {
+    // Add ANSI escape codes to display text in red.
+    return `\u001b[32m${str}\u001b[32m`;
+}
 
 program
     .configureOutput({
@@ -28,9 +25,11 @@ program
 program
     .requiredOption('-n, --network <char>', 'you must specify user')
     .requiredOption('-s, --subgraph <char>', 'subgraph name')
-    .requiredOption('-e, --environment <char>', 'node address', "local")
+    .requiredOption('-e, --environment <char>', 'node & ipfs env', "local")
     .requiredOption('-v, --version-label <char>', 'node address', "0.0.1")
+    .requiredOption('-u, --user <char>', 'the graph user')
     .option('-t, --access-token <char>', 'graph access token')
+    .option('--status <char>', 'status (prod - staging - backup','staging')
     .option('--create');
 
 
@@ -41,6 +40,8 @@ const subgraph = options.subgraph;
 const environment = options.environment;
 const versionLabel = options.versionLabel;
 const accessToken = options.accessToken;
+const user = options.user;
+const status = options.status;
 //TODO: build subgraphpath by reading json
 
 let vmPath
@@ -63,8 +64,8 @@ switch (environment) {
         ipfsAddress = "https://api.staging.thegraph.com/ipfs/"
         break
     case "prod" :
-        nodeAddress = ""
-        ipfsAddress = ""
+        nodeAddress = "https://api.thegraph.com/deploy/"
+        ipfsAddress = "https://api.thegraph.com/ipfs/"
         break
     case "pango-staging":
         nodeAddress = "https://staging.customurl.com/deploy/"
@@ -118,7 +119,7 @@ exec(`mustache subgraphs/configs/${network}.json ${subgraphPath}/manifests/templ
     // console.log(`stdout: ${stdout}`);
 });
 
-exec(`graph codegen ${subgraphPath}/manifests/${network}.yaml`, (error, stdout, stderr) => {
+exec(`graph codegen ${subgraphPath}/manifests/${network}.yaml --output-dir ${subgraphPath}/src/types`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
@@ -130,7 +131,7 @@ exec(`graph codegen ${subgraphPath}/manifests/${network}.yaml`, (error, stdout, 
     // console.log(`stdout: ${stdout}`);
 });
 
-exec(`graph deploy pangolindex/${network}-${subgraph} ${subgraphPath}/manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel} --access-token ${accessToken}`, (error, stdout, stderr) => {
+exec(`graph deploy ${user}/${network}-${subgraph}-${status} ${subgraphPath}/manifests/${network}.yaml --debug --ipfs ${ipfsAddress} --node ${nodeAddress} --version-label ${versionLabel} --access-token ${accessToken}`, (error, stdout, stderr) => {
     if (error) {
         program.error(error)
         return;
