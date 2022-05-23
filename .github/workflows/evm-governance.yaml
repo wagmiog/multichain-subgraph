@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - cicd
+    path:
+      - subgraphs/evm/governance
 jobs:
   Release:
     runs-on: ubuntu-latest
