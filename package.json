@@ -6,7 +6,8 @@
   "license": "GPL-3.0-or-later",
   "workspaces": {
     "subgraphs": [
-      "subgraphs/*"
+      "subgraphs/nearvm/*",
+      "subgraphs/evm/*"
     ],
     "nohoist": [
       "**"
