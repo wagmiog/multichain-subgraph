@@ -31,10 +31,6 @@ jobs:
       - run: yarn --frozen-lockfile
         env:
           CI: true
-      - name: Hosted Service Authentication
-        run: graph auth $GRAPH_AUTH_TOKEN
-        env:
-          GRAPH_AUTH_TOKEN: ${{ secrets.GRAPH_AUTH_TOKEN }}
       - name: Avalanche deployment
         run: yarn deploySubgraph --network avalanche --subgraph governance -e prod --user iam-robi -v $(git rev-parse --verify HEAD --short) -t $GRAPH_AUTH_TOKEN
         env:
