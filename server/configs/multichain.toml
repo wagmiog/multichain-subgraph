@@ -12,12 +12,12 @@ ingestor = "block_ingestor_node"
 [chains.near-mainnet]
 shard = "primary"
 protocol = "near"
-provider = [
-    { label = "near-mainnet", url = "https://rpc.mainnet.near.org",features = []}
-]
 #provider = [
-#    { label = "near-mainnet", details = { type = "firehose", url = "https://rpc.mainnet.near.org" }},
+#    { label = "near-mainnet", type = "firehose" ,url = "https://rpc.mainnet.near.org",features = []}
 #]
+provider = [
+    { label = "near-mainnet", details = { type = "firehose", url = "$NEAR_RPC_ENDPOINT" }},
+]
 #https://github.com/streamingfast/graph-node-dev/blob/master/config/near-mainnet.toml
 
 [chains.avalanche]

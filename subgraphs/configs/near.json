@@ -5,7 +5,7 @@
   "subgraphs": ["exchange","governance","minichef"],
   "contracts": {
     "exchange" : {
-//      "address": "",
+
       "account": "v2.ref-finance.near",
       "startBlock": "65489310"
     }

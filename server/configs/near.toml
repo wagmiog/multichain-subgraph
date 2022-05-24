@@ -8,6 +8,7 @@ pool_size = 10
 
 [chains]
 ingestor = "block_ingestor_node"
+
 [chains.near-mainnet]
 shard = "primary"
 protocol = "near"
@@ -16,7 +17,7 @@ protocol = "near"
 #] https://github.com/streamingfast/graph-node-dev/blob/master/config/near-mainnet.toml
 
 provider = [
-    { label = "near1", url = "https://rpc.mainnet.near.org",features = []}
+    { label = "near", url = "$SINGLE_RPC_ENDPOINT",features = []}
 ]
 [deployment]
 [[deployment.rule]]

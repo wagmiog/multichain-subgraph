@@ -1,5 +1,5 @@
 [general]
-
+#https://github.com/graphprotocol/graph-node/blob/master/docs/config.md
 [store]
 [store.primary]
 connection = "postgresql://graph-node:let-me-in@postgres:5432/graph-node"
@@ -12,9 +12,8 @@ ingestor = "block_ingestor_node"
 [chains.avalanche]
 shard = "primary"
 provider = [
-    { label = "mainnet1", url = "https://api.avax.network/ext/bc/C/rpc",features = []}
+    { label = "avalanche1", url = "$SINGLE_RPC_ENDPOINT",features = []}
 ]
-
 [deployment]
 [[deployment.rule]]
 shard = "primary"

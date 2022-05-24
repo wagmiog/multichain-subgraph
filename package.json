@@ -21,7 +21,8 @@
     "deploy": "yarn workspaces run deploy",
     "deploy-staging": "yarn workspaces run deploy-staging",
     "watch-local": "yarn workspaces run watch-local",
-    "deploySubgraph": "node ./scripts/deploy.js"
+    "deploySubgraph": "node ./scripts/deploy.js",
+    "deployLocal": " yarn deploySubgraph  -e local -v $(git rev-parse --verify HEAD --short) --user pangolindex --create"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.29.0",
