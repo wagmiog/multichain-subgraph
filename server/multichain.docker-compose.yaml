@@ -47,8 +47,6 @@ services:
     ports:
       - "8081:8081"
     command: ["pgweb", "--bind=0.0.0.0", "--listen=8081", "--binary-codec=hex"]
-    #command: ["pgweb", "--binary-codec=base58"]
-    #command: ["pgweb", "--binary-codec=base64"]
     links:
       - postgres:postgres
     environment:

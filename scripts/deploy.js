@@ -140,6 +140,6 @@ exec(`graph deploy ${user}/${network}-${subgraph}-${status} ${subgraphPath}/mani
         console.log(`stderr: ${stderr}`);
         return;
     }
-    // console.log(`stdout: ${stdout}`);
+    //console.log(`stdout: ${stdout}`);
 });
 
