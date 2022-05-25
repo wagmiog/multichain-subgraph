@@ -1,7 +1,7 @@
-type Account @entity {
+type User @entity {
   id: ID!
-  signerId: String!
-  timestamp: BigInt
+  # liquidityPositions: [LiquidityPosition!]
+  # usdSwapped: BigDecimal!
 }
 
 type Swap @entity {
