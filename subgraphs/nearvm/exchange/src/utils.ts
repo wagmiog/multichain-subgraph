@@ -1,5 +1,16 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
-import { Account, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
+import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
+
+export function fill_user(
+  action: near.ActionValue,
+  receipt: near.ActionReceipt,
+  blockHeader: near.BlockHeader,
+  outcome: near.ExecutionOutcome
+): User {
+  let user = new User(receipt.signerId);
+
+  return (user)
+}
 
 export function fill_pair(
     action: near.ActionValue,

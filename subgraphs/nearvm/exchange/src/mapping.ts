@@ -1,6 +1,6 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
 import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
-import { fill_pair, fill_transaction } from "./utils";
+import { fill_pair, fill_transaction, fill_user } from "./utils";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -27,7 +27,7 @@ function handleAction(
     return;
   }
   
-  let users = new User(receipt.signerId);
+  let users = fill_user(action, receipt, blockHeader, outcome);
   const functionCall = action.toFunctionCall();
 
 // SWAP FUNCTION CALL
@@ -65,7 +65,6 @@ function handleAction(
 // ADD_LIQUIDITY FUNCTION CALL
   if (functionCall.methodName == "add_liquidity") {
   const receiptId = receipt.id.toHexString();
-    users.signerId = receipt.signerId;
 
     let liquidity = new AddLiquidity(`${receiptId}`);
     if(outcome.logs[0]!= null){

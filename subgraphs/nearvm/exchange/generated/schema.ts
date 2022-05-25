@@ -11,29 +11,27 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class Account extends Entity {
+export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("signerId", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Account entity without an ID");
+    assert(id != null, "Cannot save User entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Account entity with non-string ID. " +
+        "Cannot save User entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("Account", id.toString(), this);
+      store.set("User", id.toString(), this);
     }
   }
 
-  static load(id: string): Account | null {
-    return changetype<Account | null>(store.get("Account", id));
+  static load(id: string): User | null {
+    return changetype<User | null>(store.get("User", id));
   }
 
   get id(): string {
@@ -43,32 +41,6 @@ export class Account extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get signerId(): string {
-    let value = this.get("signerId");
-    return value!.toString();
-  }
-
-  set signerId(value: string) {
-    this.set("signerId", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt | null {
-    let value = this.get("timestamp");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set timestamp(value: BigInt | null) {
-    if (!value) {
-      this.unset("timestamp");
-    } else {
-      this.set("timestamp", Value.fromBigInt(<BigInt>value));
-    }
   }
 }
 
