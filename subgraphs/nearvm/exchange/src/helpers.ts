@@ -1,0 +1,1 @@
+export const FACTORY_ADDRESS = 'v2.ref-finance.near'

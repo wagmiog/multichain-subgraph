@@ -1,7 +1,52 @@
+type PangolinFactory @entity {
+  id: ID!
+}
+
+type Token @entity {
+  id: ID!
+  symbol: String!
+  # name: String!
+  # decimals: BigInt!
+  # totalSupply: BigInt!
+  # tradeVolume: BigDecimal!
+  # tradeVolumeUSD: BigDecimal!
+  # untrackedVolumeUSD: BigDecimal!
+  # txCount: BigInt!
+  # totalLiquidity: BigDecimal!
+  # derivedETH: BigDecimal
+  # tokenDayData: [TokenDayData!]!
+  # pairDayDataBase: [PairDayData!]!
+  # pairDayDataQuote: [PairDayData!]!
+  # pairBase: [Pair!]!
+  # pairQuote: [Pair!]!
+}
+
+type Pair @entity {
+  id: ID! # pair address (corresponding to the pool ID)
+  token0: Token!
+  token1: Token!
+}
+
 type User @entity {
   id: ID!
   # liquidityPositions: [LiquidityPosition!]
   # usdSwapped: BigDecimal!
+}
+
+type LiquidityPosition @entity {
+  id: ID!
+  # user: User!
+  pair: Pair!
+  liquidityTokenBalance: BigDecimal!
+}
+
+type Transaction @entity {
+  id: ID! # txn hash
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  # mints: [Mint]! 
+  # burns: [Burn]!
+  # swaps: [Swap]!
 }
 
 type Swap @entity {
@@ -21,21 +66,6 @@ type Swap @entity {
   # amountUSD: BigDecimal! 
 }
 
-type Transaction @entity {
-  id: ID! # txn hash
-  blockNumber: BigInt!
-  timestamp: BigInt!
-  # mints: [Mint]! 
-  # burns: [Burn]!
-  # swaps: [Swap]!
-}
-
-type Pair @entity {
-  id: ID! # pair address (corresponding to the pool ID)
-  token0: Token!
-  token1: Token!
-}
-
 type AddLiquidity @entity {
   id: ID!
   output: String
@@ -47,30 +77,4 @@ type AddLiquidity @entity {
   secondPoolAmount: BigInt
   secondPool: String
   sharesMinted: BigInt
-}
-
-type Token @entity {
-  id: ID!
-  # symbol: String!
-  # name: String!
-  # decimals: BigInt!
-  # totalSupply: BigInt!
-  # tradeVolume: BigDecimal!
-  # tradeVolumeUSD: BigDecimal!
-  # untrackedVolumeUSD: BigDecimal!
-  # txCount: BigInt!
-  # totalLiquidity: BigDecimal!
-  # derivedETH: BigDecimal
-  # tokenDayData: [TokenDayData!]!
-  # pairDayDataBase: [PairDayData!]!
-  # pairDayDataQuote: [PairDayData!]!
-  # pairBase: [Pair!]!
-  # pairQuote: [Pair!]!
-}
-
-type LiquidityPosition @entity {
-  id: ID!
-  # user: User!
-  pair: Pair!
-  liquidityTokenBalance: BigDecimal!
 }

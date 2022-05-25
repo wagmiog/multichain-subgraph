@@ -1,6 +1,16 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
-import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
+import {
+  PangolinFactory,
+  User,
+  Swap, 
+  AddLiquidity, 
+  Transaction, 
+  Pair, 
+  Token, 
+  LiquidityPosition
+ } from "../generated/schema";
 import { fill_pair, fill_transaction, fill_user } from "./utils";
+import { FACTORY_ADDRESS } from "./helpers";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -29,6 +39,9 @@ function handleAction(
   
   let users = fill_user(action, receipt, blockHeader, outcome);
   const functionCall = action.toFunctionCall();
+
+// PANGOLIN FACTORY
+let factory = new PangolinFactory(FACTORY_ADDRESS)
 
 // SWAP FUNCTION CALL
   if (functionCall.methodName == "swap") {
@@ -87,5 +100,6 @@ function handleAction(
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
 
+  factory.save();
   users.save();
 }
