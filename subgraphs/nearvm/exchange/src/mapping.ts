@@ -1,5 +1,5 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
-import { Account, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
+import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
 import { fill_pair, fill_transaction } from "./utils";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
@@ -27,15 +27,15 @@ function handleAction(
     return;
   }
   
-  let accounts = new Account(receipt.signerId);
+  let users = new User(receipt.signerId);
 
   const functionCall = action.toFunctionCall();
 
 // SWAP FUNCTION CALL
   if (functionCall.methodName == "swap") {
     const receiptId = receipt.id.toHexString();
-    accounts.signerId = receipt.signerId;
-    accounts.timestamp = BigInt.fromU64(blockHeader.timestampNanosec/1000000000)
+    users.signerId = receipt.signerId;
+    users.timestamp = BigInt.fromU64(blockHeader.timestampNanosec/1000000000)
 
     let logs = new Swap(`${receiptId}`); // Initializing Swap entity
 
@@ -68,7 +68,7 @@ function handleAction(
 // ADD_LIQUIDITY FUNCTION CALL
   if (functionCall.methodName == "add_liquidity") {
   const receiptId = receipt.id.toHexString();
-    accounts.signerId = receipt.signerId;
+    users.signerId = receipt.signerId;
 
     let liquidity = new AddLiquidity(`${receiptId}`);
     if(outcome.logs[0]!= null){
@@ -91,5 +91,5 @@ function handleAction(
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
 
-  accounts.save();
+  users.save();
 }

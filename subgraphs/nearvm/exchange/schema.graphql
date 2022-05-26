@@ -1,54 +1,3 @@
-type Account @entity {
-  id: ID!
-  signerId: String!
-  timestamp: BigInt
-}
-
-type Swap @entity {
-  id: ID!
-  action: String # Added action field to define what kind of action is occuring
-  transaction: Transaction!
-  timestamp: BigInt!
-  pair: Pair!
-  sender: String # ATTENTION
-  from: String # ATTENTION
-  amount0In: BigInt
-  amount1In: BigInt
-  amount0Out: BigInt
-  amount1Out: BigInt
-  to: String # ATTENTION
-  # logIndex: BigInt 
-  # amountUSD: BigDecimal! 
-}
-
-type Transaction @entity {
-  id: ID! # txn hash
-  blockNumber: BigInt!
-  timestamp: BigInt!
-  # mints: [Mint]! 
-  # burns: [Burn]!
-  # swaps: [Swap]!
-}
-
-type Pair @entity {
-  id: ID! # pair address (corresponding to the pool ID)
-  token0: Token!
-  token1: Token!
-}
-
-type AddLiquidity @entity {
-  id: ID!
-  output: String
-  timestamp: BigInt
-  functionCalled: String
-  functionAction: String
-  firstPoolAmount: BigInt
-  firstPool: String
-  secondPoolAmount: BigInt
-  secondPool: String
-  sharesMinted: BigInt
-}
-
 type Token @entity {
   id: ID!
   # symbol: String!
@@ -68,9 +17,60 @@ type Token @entity {
   # pairQuote: [Pair!]!
 }
 
+type Pair @entity {
+  id: ID! # pair address (corresponding to the pool ID)
+  token0: Token!
+  token1: Token!
+}
+
+type User @entity {
+  id: ID!
+  signerId: String!
+  timestamp: BigInt
+}
+
 type LiquidityPosition @entity {
   id: ID!
   # user: User!
   pair: Pair!
   liquidityTokenBalance: BigDecimal!
+}
+
+type Transaction @entity {
+  id: ID! # txn hash
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  # mints: [Mint]! 
+  # burns: [Burn]!
+  # swaps: [Swap]!
+}
+
+type Swap @entity {
+  id: ID!
+  action: String # Added action field to define what kind of action is occuring
+  transaction: Transaction!
+  timestamp: BigInt!
+  pair: Pair!
+  sender: String # ATTENTION
+  from: String # ATTENTION
+  amount0In: BigInt
+  amount1In: BigInt
+  amount0Out: BigInt
+  amount1Out: BigInt
+  to: String # ATTENTION
+  # logIndex: BigInt 
+  # amountUSD: BigDecimal! 
+}
+
+type AddLiquidity @entity {
+  id: ID!
+  output: String
+  timestamp: BigInt
+  functionCalled: String
+  functionAction: String
+  firstPoolAmount: BigInt
+  firstPool: String
+  secondPoolAmount: BigInt
+  secondPool: String
+  sharesMinted: BigInt
 }
