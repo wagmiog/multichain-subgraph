@@ -11,10 +11,54 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class PangolinFactory extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save PangolinFactory entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save PangolinFactory entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("PangolinFactory", id.toString(), this);
+    }
+  }
+
+  static load(id: string): PangolinFactory | null {
+    return changetype<PangolinFactory | null>(store.get("PangolinFactory", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pairCount(): i32 {
+    let value = this.get("pairCount");
+    return value!.toI32();
+  }
+
+  set pairCount(value: i32) {
+    this.set("pairCount", Value.fromI32(value));
+  }
+}
+
 export class Token extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("totalSupply", Value.fromString(""));
   }
 
   save(): void {
@@ -41,6 +85,15 @@ export class Token extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get totalSupply(): string {
+    let value = this.get("totalSupply");
+    return value!.toString();
+  }
+
+  set totalSupply(value: string) {
+    this.set("totalSupply", Value.fromString(value));
   }
 }
 

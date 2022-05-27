@@ -15,7 +15,8 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mapping.ts
       entities:
-        - Account
+        - PangolinFactory
+        - User
         - Swap
         - AddLiquidity
         - Transaction

@@ -1,9 +1,14 @@
+type PangolinFactory @entity {
+  id: ID!
+  pairCount: Int!
+}
+
 type Token @entity {
   id: ID!
   # symbol: String!
   # name: String!
   # decimals: BigInt!
-  # totalSupply: BigInt!
+  totalSupply: String!
   # tradeVolume: BigDecimal!
   # tradeVolumeUSD: BigDecimal!
   # untrackedVolumeUSD: BigDecimal!

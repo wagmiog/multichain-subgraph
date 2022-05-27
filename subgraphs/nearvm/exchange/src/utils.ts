@@ -1,5 +1,33 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
-import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
+import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition, PangolinFactory } from "../generated/schema";
+import { FACTORY_ADDRESS } from "./helpers";
+
+export function fill_factory(
+    action: near.ActionValue,
+    receipt: near.ActionReceipt,
+    blockHeader: near.BlockHeader,
+    outcome: near.ExecutionOutcome
+) : PangolinFactory {
+
+  let factory = PangolinFactory.load(FACTORY_ADDRESS)
+  if (factory === null) {
+    factory = new PangolinFactory(FACTORY_ADDRESS)
+    factory.pairCount = 0
+    // factory.totalVolumeETH = ZERO_BD
+    // factory.totalLiquidityETH = ZERO_BD
+    // factory.totalVolumeUSD = ZERO_BD
+    // factory.untrackedVolumeUSD = ZERO_BD
+    // factory.totalLiquidityUSD = ZERO_BD
+    // factory.txCount = ZERO_BI
+
+    // create new bundle
+    // let bundle = new Bundle('1')
+    // bundle.ethPrice = ZERO_BD
+    // bundle.save()
+  }
+  factory.save()
+  return (factory)
+}
 
 export function fill_pair(
     action: near.ActionValue,
@@ -33,6 +61,11 @@ export function fill_pair(
     let splitString = rawString.split(' ')
     let token = new Token(`${receiptId}`);
     token.id = id
+    const functionCall = action.toFunctionCall();
+    if (functionCall.methodName == "ft_total_supply()") {
+      token.totalSupply = outcome.logs[0]
+    }
+    
     token.save()
   
     return (token)

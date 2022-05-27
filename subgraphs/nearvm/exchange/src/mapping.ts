@@ -1,6 +1,7 @@
 import { near, log, BigInt, json, JSONValueKind } from "@graphprotocol/graph-ts";
-import { User, Swap, AddLiquidity, Transaction, Pair, Token, LiquidityPosition } from "../generated/schema";
-import { fill_pair, fill_transaction } from "./utils";
+import { User, Swap, AddLiquidity, PangolinFactory } from "../generated/schema";
+import { fill_pair, fill_transaction, fill_factory } from "./utils";
+import { FACTORY_ADDRESS } from "./helpers"
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -28,7 +29,7 @@ function handleAction(
   }
   
   let users = new User(receipt.signerId);
-
+  let factory = fill_factory(action, receipt, blockHeader, outcome);
   const functionCall = action.toFunctionCall();
 
 // SWAP FUNCTION CALL
@@ -65,6 +66,13 @@ function handleAction(
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
 
+// ADD_SIMPLE_POOL FUNCTION CALL
+  if (functionCall.methodName == "add_simple_pool") {
+    factory.pairCount += 1;
+  } else {
+    log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
+  }
+
 // ADD_LIQUIDITY FUNCTION CALL
   if (functionCall.methodName == "add_liquidity") {
   const receiptId = receipt.id.toHexString();
@@ -90,6 +98,6 @@ function handleAction(
   } else {
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
-
+  factory.save()
   users.save();
 }
