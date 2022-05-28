@@ -3,6 +3,8 @@ import { User, Swap, AddLiquidity, PangolinFactory } from "../generated/schema";
 import { fill_pair, fill_transaction, fill_factory } from "./utils";
 import { FACTORY_ADDRESS } from "./helpers"
 
+
+// PARSING ALL ACTIONS FROM startBlock
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
   
@@ -16,6 +18,7 @@ export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   }
 }
 
+// INDEXING DATAS
 function handleAction(
   action: near.ActionValue,
   receipt: near.ActionReceipt,
@@ -29,14 +32,11 @@ function handleAction(
   }
   
   let users = new User(receipt.signerId);
-  let factory = fill_factory(action, receipt, blockHeader, outcome);
   const functionCall = action.toFunctionCall();
 
 // SWAP FUNCTION CALL
   if (functionCall.methodName == "swap") {
     const receiptId = receipt.id.toHexString();
-    users.signerId = receipt.signerId;
-    users.timestamp = BigInt.fromU64(blockHeader.timestampNanosec/1000000000)
 
     let logs = new Swap(`${receiptId}`); // Initializing Swap entity
 
@@ -53,6 +53,7 @@ function handleAction(
         // Filling Pair entity
         let pair = fill_pair(action, receipt, blockHeader, outcome);
         logs.pair = pair.id
+        logs.sender = receipt.signerId
         logs.from = receipt.signerId
         logs.to = receipt.receiverId
         logs.amount0In = BigInt.fromString(splitString[1])
@@ -68,15 +69,19 @@ function handleAction(
 
 // ADD_SIMPLE_POOL FUNCTION CALL
   if (functionCall.methodName == "add_simple_pool") {
-    factory.pairCount += 1;
+    let factory = new PangolinFactory(FACTORY_ADDRESS)
+
+    if(outcome.logs[0]!= null){
+      factory.pairCount = factory.pairCount + 1;
+    }
+    factory.save()
   } else {
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
 
 // ADD_LIQUIDITY FUNCTION CALL
   if (functionCall.methodName == "add_liquidity") {
-  const receiptId = receipt.id.toHexString();
-    users.signerId = receipt.signerId;
+    const receiptId = receipt.id.toHexString();
 
     let liquidity = new AddLiquidity(`${receiptId}`);
     if(outcome.logs[0]!= null){
@@ -98,6 +103,5 @@ function handleAction(
   } else {
     log.info("Not processed - FunctionCall is: {}", [functionCall.methodName]);
   }
-  factory.save()
   users.save();
 }

@@ -156,7 +156,7 @@ export class User extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("signerId", Value.fromString(""));
+    this.set("liquidityPosition", Value.fromString(""));
   }
 
   save(): void {
@@ -185,30 +185,13 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get signerId(): string {
-    let value = this.get("signerId");
+  get liquidityPosition(): string {
+    let value = this.get("liquidityPosition");
     return value!.toString();
   }
 
-  set signerId(value: string) {
-    this.set("signerId", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt | null {
-    let value = this.get("timestamp");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set timestamp(value: BigInt | null) {
-    if (!value) {
-      this.unset("timestamp");
-    } else {
-      this.set("timestamp", Value.fromBigInt(<BigInt>value));
-    }
+  set liquidityPosition(value: string) {
+    this.set("liquidityPosition", Value.fromString(value));
   }
 }
 

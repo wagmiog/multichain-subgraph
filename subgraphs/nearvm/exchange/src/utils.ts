@@ -12,7 +12,7 @@ export function fill_factory(
   let factory = PangolinFactory.load(FACTORY_ADDRESS)
   if (factory === null) {
     factory = new PangolinFactory(FACTORY_ADDRESS)
-    factory.pairCount = 0
+    factory.pairCount = 0;
     // factory.totalVolumeETH = ZERO_BD
     // factory.totalLiquidityETH = ZERO_BD
     // factory.totalVolumeUSD = ZERO_BD
@@ -62,7 +62,7 @@ export function fill_pair(
     let token = new Token(`${receiptId}`);
     token.id = id
     const functionCall = action.toFunctionCall();
-    if (functionCall.methodName == "ft_total_supply()") {
+    if (functionCall.methodName == "ft_total_supply") {
       token.totalSupply = outcome.logs[0]
     }
     
